@@ -10,7 +10,6 @@ env:
   TEMPLATE-FILE: infra/webapp.bicep
   SUBSCRIPTION-ID: 039169d5-2b18-45b2-ae4c-63e26d207215
   WEBAPP-NAME: devops-webapp-westeurope-523120341
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   #Build, test and publish .net web project in repository
@@ -18,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       #checkout the repository
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v5
       #prepare runner for desired .net version SDK
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "8.0.x"
           dotnet-quality: "preview"
@@ -37,14 +36,14 @@ jobs:
           zip -r ../app.zip .
       # upload the published website code artifacts
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v5
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/app.zip
 
       # upload the bicep template as artifacts for next job
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v5
         with:
           name: bicep-template
           path: ${{ env.TEMPLATE-FILE }}
@@ -58,14 +57,14 @@ jobs:
     steps:
       #Download the publish files created in previous job
       - name: Download artifact from build job
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v6
         with:
           name: .net-app
           path: .net-app
 
       #Download the bicep templates from previous job
       - name: Download artifact from build job
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v6
         with:
           name: bicep-template
           path: bicep-template
